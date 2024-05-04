@@ -14,12 +14,12 @@
         <h2>Welcome to Book Borrowing Management System (BBMS)</h2>
         <form action="controllers/loginController.php" method="post">
             <div data-mdb-input-init class="form-outline mb-4">
-                <input type="text" name="username" id="form2Example1" class="form-control" />
                 <label class="form-label" for="form2Example1">Username</label>
+                <input type="text" name="username" id="form2Example1" class="form-control" />
             </div>
             <div data-mdb-input-init class="form-outline mb-4">
-                <input type="password" name="password" id="form2Example2" class="form-control" />
                 <label class="form-label" for="form2Example2">Password</label>
+                <input type="password" name="password" id="form2Example2" class="form-control" />
             </div>
             <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
 

@@ -1,0 +1,14 @@
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.navbar-link {
+  font-size: 0.9rem;
+}
+
+.navbar-link:hover {
+  color: #6c757d;
+}

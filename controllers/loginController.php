@@ -36,11 +36,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Execute the prepared statement
             $stmt->execute();
 
+            // Fetch user data
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
             // Check if a user with the provided credentials exists
             if ($stmt->rowCount() == 1) {
                 // Set session variables
                 $_SESSION["loggedin"] = true;
                 $_SESSION["username"] = $username;
+                $_SESSION["role"] = $user['role']; // Assuming 'role' is the column name in your database
 
                 // Redirect to home page
                 header("location: ../homepage.php");

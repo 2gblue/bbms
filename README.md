@@ -7,6 +7,13 @@ Explanations for directory in this readme section
 Contains **one .sql** file - import these to phpmyadmin to keep it consistent.
 **Export** and **replace** this .sql file when there's changes in database structure between commits.
 
+Accounts for bbms:
+user / test
+staff / test
+**Role** = 1 (for user) & 2 (for staff) in "user" table in DB.
+
+Uses **PDO SQL** method.
+
 ## /controllers
 
 Contains controllers (.php files) used in the system.
@@ -25,7 +32,7 @@ Contains images used in the website designs.
 
 Contains .js files used in the system.
 
-## uploads
+## /uploads
 
 Contains whatever that will be uploaded by users into the system.
 

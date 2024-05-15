@@ -120,7 +120,7 @@ $total_pages = ceil($total_records / $records_per_page);
                     </form>
                 </div>
                 
-                <div class="col-md-4 text-end" style="z-index: 10; position:absolute; right:0;">
+                <div style="z-index: 10; position:absolute; right:-77%;">
                     <!-- Page directory -->
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
@@ -129,7 +129,7 @@ $total_pages = ceil($total_records / $records_per_page);
                             </li>
                             <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
                                 <li class="page-item <?php echo ($i == $current_page) ? 'active' : ''; ?>">
-                                    <a class="page-link" href="reservationHistory.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                    <a class="page-link" style="background-color: #7749F8;" href="reservationHistory.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
                                 </li>
                             <?php endfor; ?>
                             <li class="page-item <?php echo ($current_page == $total_pages) ? 'disabled' : ''; ?>">
@@ -139,6 +139,10 @@ $total_pages = ceil($total_records / $records_per_page);
                     </nav>
                 </div>
             </div>
+
+            <p>
+            <button class="btn btn-success" type="submit" id="button-addon2" style="z-index: 10; position:absolute; right: 12.5%;">Archive</button>
+            </p>
 
             <div>
             

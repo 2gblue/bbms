@@ -13,3 +13,10 @@ div.page {
   text-align: right;
 }
 
+.page-link:hover{
+  background-color:#7749F8;
+}
+
+.btn:hover{
+  background-color: #187d2f;
+}

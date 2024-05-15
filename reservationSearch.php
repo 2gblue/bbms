@@ -121,7 +121,7 @@ $total_pages = ceil($total_records / $records_per_page);
                     </form>
                 </div>
                 
-                <div class="col-md-4 text-end" style="z-index: 10; position:absolute; right:0;">
+                <div style="z-index: 10; position:absolute; right:-77%;">
                     <!-- Page directory -->
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
@@ -141,8 +141,11 @@ $total_pages = ceil($total_records / $records_per_page);
                 </div>
             </div>
 
+            <p>
+            <button class="btn btn-success" type="submit" id="button-addon2" style="z-index: 10; position:absolute; right: 12.5%;">Archive</button>
+            </p>
+
             <div>
-            
                 <!-- List of Reservations History -->
                 <form method="post">
                     <table border="1" class="table table-hover" style="width: 100%">

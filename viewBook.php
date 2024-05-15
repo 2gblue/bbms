@@ -70,7 +70,7 @@ $user_role = isset($_SESSION["role"]) ? $_SESSION["role"] : null;
                     <a class="navbar-brand navbar-link" href="./homepage.php">Home</a>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="./bookCatalogueManage.php">Browse Books</a>
+                    <a class="navbar-brand navbar-link" href="#" id="bookCatalogueLink" data-role="<?php echo isset($_SESSION["role"]) ? $_SESSION["role"] : ""; ?>">Browse Books</a>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Rentals</a>
@@ -155,6 +155,7 @@ $user_role = isset($_SESSION["role"]) ? $_SESSION["role"] : null;
             <?php endif; ?>
         </div>
 
+        <script src="./resources/js/navbar.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 

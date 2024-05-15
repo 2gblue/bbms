@@ -34,21 +34,21 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['search'])) {
 //session user ID
 $userID = $_SESSION["id"];
 $role = $_SESSION["role"];
+$search = $_POST["search"];
 
 // Retrieve history data from the database with pagination and search criteria
-$sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID'";
+$sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.rental_ID = '$search'";
 
 $sql .= " LIMIT $start_from, $records_per_page";
 
 $result = mysqli_query($conn, $sql);
 
 // Count total number of records for pagination
-$total_pages_sql = "SELECT COUNT(*) AS total FROM history";
-if (!empty($search)) {
-    $total_pages_sql .= " WHERE bookTitle LIKE '%$search%'";
-}
+$total_pages_sql = "SELECT COUNT(*) AS total FROM history WHERE rental_ID = '$search'";
+
 $result_total = mysqli_query($conn, $total_pages_sql);
 $row_total = mysqli_fetch_assoc($result_total);
+
 $total_records = $row_total['total'];
 $total_pages = ceil($total_records / $records_per_page);
 ?>
@@ -56,6 +56,7 @@ $total_pages = ceil($total_records / $records_per_page);
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Header -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -184,8 +185,15 @@ $total_pages = ceil($total_records / $records_per_page);
                         <?php
                                 }
                             }
+                            else if($search == null){
+                                $message = "Please type in the search box!";
+                                echo "<script type='text/javascript'>alert('$message');</script>";
+                                echo "<script type = 'text/javascript'> window.location='reservationHistory.php' </script>";
+                            }
                             else{
-                                echo "0 results";
+                                $message = "Sorry. Search cannot be found...";
+                                echo "<script type='text/javascript'>alert('$message');</script>";
+                                echo "<script type = 'text/javascript'> window.location='reservationHistory.php' </script>";
                             }
                         ?>
                     </table>

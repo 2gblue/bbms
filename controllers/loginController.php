@@ -44,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Set session variables
                 $_SESSION["loggedin"] = true;
                 $_SESSION["username"] = $username;
+                $_SESSION["id"] = $user['id'];
                 $_SESSION["role"] = $user['role']; // Assuming 'role' is the column name in your database
 
                 // Redirect to home page

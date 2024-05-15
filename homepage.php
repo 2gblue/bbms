@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                     <a class="navbar-brand navbar-link" href="#">Rentals</a>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="#">History</a>
+                    <a class="navbar-brand navbar-link" href="./reservationHistory.php">History</a>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Analytics</a>
@@ -66,6 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 
     <div class="container container-main">
         Welcome to BBMS
+        <?php echo htmlspecialchars($_SESSION["id"]); ?>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

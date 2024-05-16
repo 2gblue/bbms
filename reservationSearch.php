@@ -37,7 +37,7 @@ $role = $_SESSION["role"];
 $search = $_POST["search"];
 
 // Retrieve history data from the database with pagination and search criteria
-$sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.rental_ID = '$search'";
+$sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.archived = 0 AND h.rental_ID = '$search'";
 
 $sql .= " LIMIT $start_from, $records_per_page";
 

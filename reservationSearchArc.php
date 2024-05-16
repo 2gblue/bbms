@@ -34,21 +34,21 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['search'])) {
 //session user ID
 $userID = $_SESSION["id"];
 $role = $_SESSION["role"];
+$search = $_POST["search"];
 
 // Retrieve history data from the database with pagination and search criteria
-$sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.archived = 0";
+$sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.archived = 1 AND h.rental_ID = '$search'";
 
 $sql .= " LIMIT $start_from, $records_per_page";
 
 $result = mysqli_query($conn, $sql);
 
 // Count total number of records for pagination
-$total_pages_sql = "SELECT COUNT(*) AS total FROM history";
-if (!empty($search)) {
-    $total_pages_sql .= " WHERE bookTitle LIKE '%$search%'";
-}
+$total_pages_sql = "SELECT COUNT(*) AS total FROM history WHERE rental_ID = '$search'";
+
 $result_total = mysqli_query($conn, $total_pages_sql);
 $row_total = mysqli_fetch_assoc($result_total);
+
 $total_records = $row_total['total'];
 $total_pages = ceil($total_records / $records_per_page);
 ?>
@@ -56,6 +56,7 @@ $total_pages = ceil($total_records / $records_per_page);
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Header -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -107,13 +108,13 @@ $total_pages = ceil($total_records / $records_per_page);
 
 
     <div class="container container-main">
-        <h2 style="text-align:center;"><u>Book Rental History</u></h2>
+        <h2 style="text-align:center;"><u>Archives</u></h2>
         <br>
         <div class="container container-sub">
             <div class="row">
                 <div class="col-md-4">
                     <!-- Search bar -->
-                    <form class="input-group mb-3" action="reservationSearch.php" method="post">
+                    <form class="input-group mb-3" action="reservationSearchArc.php" method="post">
                         <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon2" name="search">
                         <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
                             <i class='bx bx-search-alt-2'></i></button>
@@ -125,26 +126,22 @@ $total_pages = ceil($total_records / $records_per_page);
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                             <li class="page-item <?php echo ($current_page == 1) ? 'disabled' : ''; ?>">
-                                <a class="page-link" href="<?php echo ($current_page == 1) ? '#' : 'reservationHistory.php?page=' . ($current_page - 1); ?>">Prev</a>
+                                <a class="page-link" href="<?php echo ($current_page == 1) ? '#' : 'reservationArchive.php?page=' . ($current_page - 1); ?>">Prev</a>
                             </li>
                             <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
                                 <li class="page-item <?php echo ($i == $current_page) ? 'active' : ''; ?>">
-                                    <a class="page-link" style="background-color: #7749F8;" href="reservationHistory.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                    <a class="page-link" href="reservationArchive.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
                                 </li>
                             <?php endfor; ?>
                             <li class="page-item <?php echo ($current_page == $total_pages) ? 'disabled' : ''; ?>">
-                                <a class="page-link" href="<?php echo ($current_page == $total_pages) ? '#' : 'reservationHistory.php?page=' . ($current_page + 1); ?>">Next</a>
+                                <a class="page-link" href="<?php echo ($current_page == $total_pages) ? '#' : 'reservationArchive.php?page=' . ($current_page + 1); ?>">Next</a>
                             </li>
                         </ul>
                     </nav>
                 </div>
             </div>
 
-            <!-- Archive Button -->
-            <p>
-            <button class="btn btn-success" type="button" id="button-addon2" style="z-index: 10; position:absolute; right: 12.5%;" onclick="window.location.href='/bbms/reservationArchive.php';">Archive</button>
-            </p>
-            
+            <div>
                 <!-- List of Reservations History -->
                 <form method="post">
                     <table border="1" class="table table-hover" style="width: 100%">
@@ -159,7 +156,7 @@ $total_pages = ceil($total_records / $records_per_page);
                         <tr>
                             <?php  if (mysqli_num_rows($result) > 0){
                             // output data of each row
-                                while($row = mysqli_fetch_assoc($result)){
+                                while($row = mysqli_fetch_assoc($result) ){
                                 $rentID = $row["rental_ID"];
                                 $bookTitle = $row["user_fullName"]; //book connect to book books
                                 $date = $row["complaint_Date"]; //borrow date
@@ -181,15 +178,21 @@ $total_pages = ceil($total_records / $records_per_page);
                                 }
                                 ?>
                                 
-                                <a><button class="btn btn-light" type="button" onclick="window.location.href='/bbms/controllers/insertHistoryController.php?rent=<?php echo $rentID?>';"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16"><path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/></svg></button></a>
-                                
+			                    <a><button class="btn btn-light" type="button" onclick="window.location.href='/FKEduSearch/Complaint/User/delete.php?comid=<?php echo $complainid; ?>';"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16"><path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/></svg></button></a>
 		                        </td>
 	                    </tr>
                         <?php
                                 }
                             }
+                            else if($search == null){
+                                $message = "Please type in the search box!";
+                                echo "<script type='text/javascript'>alert('$message');</script>";
+                                echo "<script type = 'text/javascript'> window.location='reservationArchive.php' </script>";
+                            }
                             else{
-                                echo "0 results";
+                                $message = "Sorry. Search cannot be found...";
+                                echo "<script type='text/javascript'>alert('$message');</script>";
+                                echo "<script type = 'text/javascript'> window.location='reservationArchive.php' </script>";
                             }
                         ?>
                     </table>

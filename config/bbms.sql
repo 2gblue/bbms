@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2024 at 01:37 PM
+-- Generation Time: May 16, 2024 at 12:56 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -69,17 +69,20 @@ CREATE TABLE `history` (
   `borrowID` int(5) NOT NULL,
   `status_ID` int(5) NOT NULL,
   `rental_deadline` date NOT NULL,
-  `rental_remark` varchar(255) DEFAULT NULL
+  `rental_remark` varchar(255) DEFAULT NULL,
+  `archived` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `history`
 --
 
-INSERT INTO `history` (`rental_ID`, `id`, `borrowID`, `status_ID`, `rental_deadline`, `rental_remark`) VALUES
-(1, 1, 1, 1, '2024-05-22', 'yaku chaku'),
-(2, 2, 2, 3, '2024-05-23', 'test'),
-(3, 1, 3, 1, '2024-05-28', NULL);
+INSERT INTO `history` (`rental_ID`, `id`, `borrowID`, `status_ID`, `rental_deadline`, `rental_remark`, `archived`) VALUES
+(1, 1, 1, 1, '2024-05-22', 'yaku chaku', 1),
+(2, 2, 2, 3, '2024-05-23', 'test', 1),
+(3, 1, 3, 1, '2024-05-28', NULL, 1),
+(4, 1, 8, 3, '2024-05-24', 'lilu', 0),
+(9, 1, 12, 1, '2024-05-22', 'hu', 1);
 
 -- --------------------------------------------------------
 
@@ -140,6 +143,9 @@ ALTER TABLE `book`
 ALTER TABLE `history`
   ADD PRIMARY KEY (`rental_ID`),
   ADD UNIQUE KEY `borrowID` (`borrowID`),
+  ADD UNIQUE KEY `rental_ID` (`rental_ID`),
+  ADD UNIQUE KEY `rental_ID_2` (`rental_ID`),
+  ADD UNIQUE KEY `rental_ID_3` (`rental_ID`),
   ADD KEY `id` (`id`) USING BTREE,
   ADD KEY `rental_status` (`status_ID`) USING BTREE;
 
@@ -169,7 +175,7 @@ ALTER TABLE `book`
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `rental_ID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `rental_ID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `history_status`

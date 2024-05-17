@@ -106,97 +106,69 @@ $total_pages = ceil($total_records / $records_per_page);
 <!-- Top Nav -->
 
 
+
     <div class="container container-main">
-        <h2 style="text-align:center;"><u>Book Rental History</u></h2>
+        <h2 style="text-align:center;"><u>View Book</u></h2>
         <br>
         <div class="container container-sub">
-            <div class="row">
-                <div class="col-md-4">
-                    <!-- Search bar -->
-                    <form class="input-group mb-3" action="reservationSearch.php" method="post">
-                        <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon2" name="search">
-                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
-                            <i class='bx bx-search-alt-2'></i></button>
-                    </form>
-                </div>
-                
-                <div style="z-index: 10; position:absolute; right:-77%;">
-                    <!-- Page directory -->
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-                            <li class="page-item <?php echo ($current_page == 1) ? 'disabled' : ''; ?>">
-                                <a class="page-link" href="<?php echo ($current_page == 1) ? '#' : 'reservationHistory.php?page=' . ($current_page - 1); ?>">Prev</a>
-                            </li>
-                            <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-                                <li class="page-item <?php echo ($i == $current_page) ? 'active' : ''; ?>">
-                                    <a class="page-link" style="background-color: #7749F8;" href="reservationHistory.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                                </li>
-                            <?php endfor; ?>
-                            <li class="page-item <?php echo ($current_page == $total_pages) ? 'disabled' : ''; ?>">
-                                <a class="page-link" href="<?php echo ($current_page == $total_pages) ? '#' : 'reservationHistory.php?page=' . ($current_page + 1); ?>">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-md-12">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <br>
+                            <?php if (!empty($bookCover)) : ?>
+                                <img src="<?php echo htmlspecialchars($bookCover); ?>" alt="Book Cover" style="max-width: 40%; height: auto;">
+                            <?php else : ?>
+                                <p>No book cover available</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="bookTitle" class="form-label"><b>Book Title</b></label>
+                        </div>
+                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
+                            <input type="text" class="form-control" id="bookTitle" name="bookTitle" value="<?php echo htmlspecialchars($bookTitle); ?>" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="isbn" class="form-label"><b>ISBN</b></label>
+                            <input type="text" class="form-control" id="isbn" name="isbn" value="<?php echo htmlspecialchars($isbn); ?>" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="authorName" class="form-label"><b>Author Name</b></label>
+                            <input type="text" class="form-control" id="authorName" name="authorName" value="<?php echo htmlspecialchars($authorName); ?>" readonly>
+                        </div>
+                        <div class="col">
+                            <label for="quantity" class="form-label"><b>Quantity</b></label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" value="<?php echo htmlspecialchars($quantity); ?>" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="publicationCompany" class="form-label"><b>Publication Company</b></label>
+                            <input type="text" class="form-control" id="publicationCompany" name="publicationCompany" value="<?php echo htmlspecialchars($publicationCompany); ?>" readonly>
+                        </div>
+                        <div class="col">
+                            <label for="genre" class="form-label"><b>Genre</b></label>
+                            <input type="text" class="form-control" id="genre" name="genre" value="<?php echo htmlspecialchars($genre); ?>" readonly>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <!-- Archive Button -->
-            <p>
-            <button class="btn btn-success" type="button" id="button-addon2" style="z-index: 10; position:absolute; right: 12.5%;" onclick="window.location.href='/bbms/reservationArchive.php';">Archive</button>
-            </p>
-            
-                <!-- List of Reservations History -->
-                <form method="post">
-                    <table border="1" class="table table-hover" style="width: 100%">
-                        <tr class="thread">
-                            <th class="table-secondary" scope="col">Rental ID</th>
-                            <th class="table-secondary" scope="col">Book Name</th>
-                            <th class="table-secondary" scope="col">Date</th>
-                            <th class="table-secondary" scope="col">Deadline</th>
-                            <th class="table-secondary" scope="col">Status</th>
-                            <th class="table-secondary" scope="col">Action</th>
-                        </tr>
-                        <tr>
-                            <?php  if (mysqli_num_rows($result) > 0){
-                            // output data of each row
-                                while($row = mysqli_fetch_assoc($result)){
-                                $rentID = $row["rental_ID"];
-                                $bookTitle = $row["user_fullName"]; //book connect to book books
-                                $date = $row["complaint_Date"]; //borrow date
-                                $deadline = $row["rental_deadline"];
-	                            $status = $row["status_name"];
-                            ?>	
-                                <td><?php echo $rentID; ?></td>
-		                        <td><?php echo $bookTitle; ?></td>
-                                <td><?php echo $date; ?></td>
-                                <td><?php echo $deadline; ?></td>
-                                <td><?php echo $status; ?></td>
-		                        <td>
-                                <a><button class="btn btn-light" type="button" onclick="window.location.href='/FKEduSearch/Complaint/User/view_reply.php';"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg></button></a> 
-                                <?php 
-                                if ($role == "2") {
-                                ?>
-                                <a><button class="btn btn-light" type="button" onclick="window.location.href='/FKEduSearch/Complaint/User/view.php?comid=<?php echo $complainid; ?>';"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brush-fill" viewBox="0 0 16 16"><path d="M15.825.12a.5.5 0 0 1 .132.584c-1.53 3.43-4.743 8.17-7.095 10.64a6.1 6.1 0 0 1-2.373 1.534c-.018.227-.06.538-.16.868-.201.659-.667 1.479-1.708 1.74a8.1 8.1 0 0 1-3.078.132 4 4 0 0 1-.562-.135 1.4 1.4 0 0 1-.466-.247.7.7 0 0 1-.204-.288.62.62 0 0 1 .004-.443c.095-.245.316-.38.461-.452.394-.197.625-.453.867-.826.095-.144.184-.297.287-.472l.117-.198c.151-.255.326-.54.546-.848.528-.739 1.201-.925 1.746-.896q.19.012.348.048c.062-.172.142-.38.238-.608.261-.619.658-1.419 1.187-2.069 2.176-2.67 6.18-6.206 9.117-8.104a.5.5 0 0 1 .596.04"/></svg></button></a> 
-                                <?php 
-                                }
-                                ?>
-                                
-                                <a><button class="btn btn-light" type="button" onclick="window.location.href='/bbms/controllers/insertHistoryController.php?rent=<?php echo $rentID?>';"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16"><path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/></svg></button></a>
-                                
-		                        </td>
-	                    </tr>
-                        <?php
-                                }
-                            }
-                            else{
-                                echo "0 results";
-                            }
-                        ?>
-                    </table>
-                </form>
-            </div>
+            <?php if ($user_role == 1) : ?>
+                <button type="button" class="btn btn-danger" style="margin-bottom:20px;">Rent Now</button>
+            <?php endif; ?>
         </div>
-    </div>
+
+        <script src="./resources/js/navbar.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+        </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

@@ -36,7 +36,12 @@ $userID = $_SESSION["id"];
 $role = $_SESSION["role"];
 
 // Retrieve history data from the database with pagination and search criteria
-$sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.archived = 1";
+if ($role == "1") {
+    $sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.archived = 1";
+}
+else if ($role == "2"){
+    $sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.archived = 1";
+}
 
 $sql .= " LIMIT $start_from, $records_per_page";
 

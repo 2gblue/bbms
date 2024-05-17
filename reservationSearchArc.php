@@ -37,7 +37,12 @@ $role = $_SESSION["role"];
 $search = $_POST["search"];
 
 // Retrieve history data from the database with pagination and search criteria
-$sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.archived = 1 AND h.rental_ID = '$search'";
+if ($role == "1") {
+    $sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.archived = 1 AND h.rental_ID = '$search'";
+}
+else if($role == "2"){
+    $sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.archived = 1 AND h.rental_ID = '$search'";
+}
 
 $sql .= " LIMIT $start_from, $records_per_page";
 
@@ -113,6 +118,7 @@ $total_pages = ceil($total_records / $records_per_page);
         <div class="container container-sub">
             <div class="row">
                 <div class="col-md-4">
+
                     <!-- Search bar -->
                     <form class="input-group mb-3" action="reservationSearchArc.php" method="post">
                         <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon2" name="search">

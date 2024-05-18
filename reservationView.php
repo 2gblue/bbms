@@ -17,15 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     exit;
 }
 
-//limit pages for the tables
-$records_per_page = 9;
-if (isset($_GET['page']) && is_numeric($_GET['page'])) {
-    $current_page = $_GET['page'];
-} else {
-    $current_page = 1;
-}
-$start_from = ($current_page - 1) * $records_per_page;
-
 $search = '';
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['search'])) {
     $search = $_GET['search'];
@@ -36,9 +27,8 @@ $userID = $_SESSION["id"];
 $role = $_SESSION["role"];
 
 // Retrieve history data from the database with pagination and search criteria
-$sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.archived = 0";
-
-$sql .= " LIMIT $start_from, $records_per_page";
+$sql = "SELECT book.*, bor.*, h.*
+        FROM ((history h INNER JOIN borrow bor ON h.borrowID = bor.borrowID) INNER JOIN book book ON bor.bookID  = book.id) WHERE h.rental_ID = '$userID'";
 
 $result = mysqli_query($conn, $sql);
 
@@ -50,7 +40,6 @@ if (!empty($search)) {
 $result_total = mysqli_query($conn, $total_pages_sql);
 $row_total = mysqli_fetch_assoc($result_total);
 $total_records = $row_total['total'];
-$total_pages = ceil($total_records / $records_per_page);
 ?>
 
 <!DOCTYPE html>
@@ -106,11 +95,13 @@ $total_pages = ceil($total_records / $records_per_page);
 <!-- Top Nav -->
 
 
-
+<!-- Page Content -->
     <div class="container container-main">
-        <h2 style="text-align:center;"><u>View Book</u></h2>
+
+    <!-- Title -->
+        <h2 style="text-align:center;"><u>Rental Details</u></h2>
         <br>
-        <div class="container container-sub">
+        <div class="container container-sub" style="overflow:scroll; height:600px;">
             <div class="row" style="margin-top:20px;">
                 <div class="col-md-12">
                     <div class="row mb-3">
@@ -121,6 +112,32 @@ $total_pages = ceil($total_records / $records_per_page);
                             <?php else : ?>
                                 <p>No book cover available</p>
                             <?php endif; ?>
+                        </div>
+                        <div class="col">
+                            <div class="row mb-3">
+                                <div class="col" style="margin-right:-300px; margin-left:250px;">
+                                    <label for="time" class="form-label"><b>Time</b></label>
+                                </div>
+                                <div class="col" style="margin-left:120px; margin-top:-10px;">
+                                    <input type="text" class="form-control" id="time" name="time" value="<?php echo htmlspecialchars($time); ?>" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col" style="margin-right:-300px; margin-left:250px;">
+                                    <label for="date" class="form-label"><b>Date</b></label>
+                                </div>
+                                <div class="col" style="margin-left:120px; margin-top:-10px;">
+                                    <input type="text" class="form-control" id="date" name="date" value="<?php echo htmlspecialchars($date); ?>" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col" style="margin-right:-300px; margin-left:250px;">
+                                    <label for="deadline" class="form-label"><b>Deadline</b></label>
+                                </div>
+                                <div class="col" style="margin-left:120px; margin-top:-10px;">
+                                    <input type="text" class="form-control" id="deadline" name="deadline" value="<?php echo htmlspecialchars($deadline); ?>" readonly>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <br>
@@ -135,42 +152,57 @@ $total_pages = ceil($total_records / $records_per_page);
                     <div class="row mb-3">
                         <div class="col">
                             <label for="isbn" class="form-label"><b>ISBN</b></label>
+                        </div>
+                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
                             <input type="text" class="form-control" id="isbn" name="isbn" value="<?php echo htmlspecialchars($isbn); ?>" readonly>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
                             <label for="authorName" class="form-label"><b>Author Name</b></label>
-                            <input type="text" class="form-control" id="authorName" name="authorName" value="<?php echo htmlspecialchars($authorName); ?>" readonly>
                         </div>
-                        <div class="col">
-                            <label for="quantity" class="form-label"><b>Quantity</b></label>
-                            <input type="number" class="form-control" id="quantity" name="quantity" value="<?php echo htmlspecialchars($quantity); ?>" readonly>
+                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
+                            <input type="text" class="form-control" id="authorName" name="authorName" value="<?php echo htmlspecialchars($authorName); ?>" readonly>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="publicationCompany" class="form-label"><b>Publication Company</b></label>
+                            <label for="publicationCompany" class="form-label"><b>Publication</b></label>
+                        </div>
+                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
                             <input type="text" class="form-control" id="publicationCompany" name="publicationCompany" value="<?php echo htmlspecialchars($publicationCompany); ?>" readonly>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col">
                             <label for="genre" class="form-label"><b>Genre</b></label>
+                        </div>
+                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
                             <input type="text" class="form-control" id="genre" name="genre" value="<?php echo htmlspecialchars($genre); ?>" readonly>
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="pagenum" class="form-label"><b>Number of Pages</b></label>
+                        </div>
+                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
+                            <input type="text" class="form-control" id="pagenum" name="pagenum" value="<?php echo htmlspecialchars($pagenum); ?>" readonly>
+                        </div>
+                    </div>
+                        <!-- Previous Page button -->
+                        <button class="btn btn-success" type="button" id="button-addon2" style="z-index: 10; position:absolute; right: 12.5%;" onclick="history.back();">Back</button>
                 </div>
             </div>
-            <?php if ($user_role == 1) : ?>
-                <button type="button" class="btn btn-danger" style="margin-bottom:20px;">Rent Now</button>
-            <?php endif; ?>
         </div>
 
         <script src="./resources/js/navbar.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
         </div>
 
+<!-- To ensure the bootstrap items is working -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybBogGz1H5A8Y6HN9A7C1K1bGuhrBxl3iWv2lfVH6wR8d4Eu3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+7HAuoJl+0I4u0g8JGuhGflf4x6dz" crossorigin="anonymous"></script>
 </body>
 
 </html>

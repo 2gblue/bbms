@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2024 at 12:56 PM
+-- Generation Time: May 18, 2024 at 03:44 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -60,6 +60,29 @@ INSERT INTO `book` (`id`, `bookTitle`, `pagesNumber`, `authorName`, `quantity`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `borrow`
+--
+
+CREATE TABLE `borrow` (
+  `borrowID` int(5) NOT NULL,
+  `bookID` int(5) NOT NULL,
+  `userID` int(5) NOT NULL,
+  `time` varchar(4) NOT NULL,
+  `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `borrow`
+--
+
+INSERT INTO `borrow` (`borrowID`, `bookID`, `userID`, `time`, `date`) VALUES
+(1, 1, 1, '', '2024-05-18'),
+(2, 4, 1, '', '2024-05-18'),
+(3, 2, 1, '', '2024-05-18');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `history`
 --
 
@@ -70,7 +93,7 @@ CREATE TABLE `history` (
   `status_ID` int(5) NOT NULL,
   `rental_deadline` date NOT NULL,
   `rental_remark` varchar(255) DEFAULT NULL,
-  `archived` int(1) DEFAULT NULL
+  `archived` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -78,11 +101,9 @@ CREATE TABLE `history` (
 --
 
 INSERT INTO `history` (`rental_ID`, `id`, `borrowID`, `status_ID`, `rental_deadline`, `rental_remark`, `archived`) VALUES
-(1, 1, 1, 1, '2024-05-22', 'yaku chaku', 1),
-(2, 2, 2, 3, '2024-05-23', 'test', 1),
-(3, 1, 3, 1, '2024-05-28', NULL, 1),
-(4, 1, 8, 3, '2024-05-24', 'lilu', 0),
-(9, 1, 12, 1, '2024-05-22', 'hu', 1);
+(1, 1, 3, 1, '2024-05-24', 'lilu', 0),
+(3, 1, 1, 1, '2024-05-25', 'hihu', 0),
+(23, 1, 2, 3, '2024-05-25', 'lop', 1);
 
 -- --------------------------------------------------------
 
@@ -125,7 +146,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `password`, `role`) VALUES
 (1, 'user', 'test', 1),
-(2, 'staff', 'test', 2);
+(2, 'staff', 'test', 2),
+(3, 'aniz', 'test', 1);
 
 --
 -- Indexes for dumped tables
@@ -138,16 +160,24 @@ ALTER TABLE `book`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `borrow`
+--
+ALTER TABLE `borrow`
+  ADD PRIMARY KEY (`borrowID`),
+  ADD KEY `bookID` (`bookID`),
+  ADD KEY `userID` (`userID`);
+
+--
 -- Indexes for table `history`
 --
 ALTER TABLE `history`
   ADD PRIMARY KEY (`rental_ID`),
-  ADD UNIQUE KEY `borrowID` (`borrowID`),
   ADD UNIQUE KEY `rental_ID` (`rental_ID`),
   ADD UNIQUE KEY `rental_ID_2` (`rental_ID`),
   ADD UNIQUE KEY `rental_ID_3` (`rental_ID`),
   ADD KEY `id` (`id`) USING BTREE,
-  ADD KEY `rental_status` (`status_ID`) USING BTREE;
+  ADD KEY `rental_status` (`status_ID`) USING BTREE,
+  ADD KEY `borrowID` (`borrowID`);
 
 --
 -- Indexes for table `history_status`
@@ -172,10 +202,16 @@ ALTER TABLE `book`
   MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
+-- AUTO_INCREMENT for table `borrow`
+--
+ALTER TABLE `borrow`
+  MODIFY `borrowID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `rental_ID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `rental_ID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `history_status`
@@ -187,16 +223,24 @@ ALTER TABLE `history_status`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
 --
 
 --
+-- Constraints for table `borrow`
+--
+ALTER TABLE `borrow`
+  ADD CONSTRAINT `borrow_ibfk_1` FOREIGN KEY (`bookID`) REFERENCES `book` (`id`),
+  ADD CONSTRAINT `borrow_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `user` (`id`);
+
+--
 -- Constraints for table `history`
 --
 ALTER TABLE `history`
+  ADD CONSTRAINT `history_ibfk_1` FOREIGN KEY (`borrowID`) REFERENCES `borrow` (`borrowID`),
   ADD CONSTRAINT `status` FOREIGN KEY (`status_ID`) REFERENCES `history_status` (`status_ID`),
   ADD CONSTRAINT `user id` FOREIGN KEY (`id`) REFERENCES `user` (`id`);
 COMMIT;

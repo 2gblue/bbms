@@ -37,10 +37,10 @@ $role = $_SESSION["role"];
 
 // Retrieve history data from the database with pagination and search criteria
 if($role == "1"){
-    $sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.archived = 0";
+    $sql = "SELECT h.*, hs.status_name, u.id, bor.*, bo.bookTitle FROM ((((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) INNER JOIN borrow bor ON h.borrowID  = bor.borrowID) INNER JOIN book bo ON bor.bookID = bo.id) WHERE h.id = '$userID' AND h.archived = 0";
 }
 else if ($role == "2"){
-    $sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.archived = 0";
+    $sql = "SELECT h.*, hs.status_name, u.id, bor.*, bo.bookTitle FROM ((((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) INNER JOIN borrow bor ON h.borrowID  = bor.borrowID) INNER JOIN book bo ON bor.bookID = bo.id) WHERE h.archived = 0";
 }
 
 $sql .= " LIMIT $start_from, $records_per_page";
@@ -143,13 +143,14 @@ $total_pages = ceil($total_records / $records_per_page);
                         </ul>
                     </nav>
                 </div>
+                <div class="row">
+                    <!-- Archive Button -->
+                    <p>
+                    <button class="btn btn-success" type="button" id="button-addon2" style="z-index: 10; position:absolute; right: 12.5%;" onclick="window.location.href='/bbms/reservationArchive.php';">Archive</button>
+                    </p>
+                </div>
             </div>
-
-            <!-- Archive Button -->
-            <p>
-            <button class="btn btn-success" type="button" id="button-addon2" style="z-index: 10; position:absolute; right: 12.5%;" onclick="window.location.href='/bbms/reservationArchive.php';">Archive</button>
-            </p>
-            
+            <br><br>
                 <!-- List of Reservations History -->
                 <form method="post">
                     <table border="1" class="table table-hover" style="width: 100%">
@@ -166,8 +167,8 @@ $total_pages = ceil($total_records / $records_per_page);
                             // output data of each row
                                 while($row = mysqli_fetch_assoc($result)){
                                 $rentID = $row["rental_ID"];
-                                $bookTitle = $row["user_fullName"]; //book connect to book books
-                                $date = $row["complaint_Date"]; //borrow date
+                                $bookTitle = $row["bookTitle"]; //book connect to book books
+                                $date = $row["date"]; //borrow date
                                 $deadline = $row["rental_deadline"];
 	                            $status = $row["status_name"];
                             ?>	
@@ -177,7 +178,7 @@ $total_pages = ceil($total_records / $records_per_page);
                                 <td><?php echo $deadline; ?></td>
                                 <td><?php echo $status; ?></td>
 		                        <td>
-                                <a><button class="btn btn-light" type="button" onclick="window.location.href='/FKEduSearch/Complaint/User/view_reply.php';"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg></button></a> 
+                                <a><button class="btn btn-light" type="button" onclick="window.location.href='/bbms/reservationView.php';"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg></button></a> 
                                 <?php 
                                 if ($role == "2") {
                                 ?>

@@ -52,6 +52,12 @@ $pages = $row["pagesNumber"];
 $time = $row["time"];
 $date = $row["date"];
 $deadline = $row["rental_deadline"];
+
+//users info
+$name = $row["user_fullName"];
+$matric = $row["user_matric"];
+$faculty = $row["user_faculty"];
+$phone = $row["user_phone"];
 ?>
 
 <!DOCTYPE html>
@@ -115,7 +121,7 @@ $deadline = $row["rental_deadline"];
         <br>
 
         <?php 
-        if($role == "1"){
+        if($role == "2"){
         ?>
         <div class="container container-sub" style="overflow:scroll; height:auto; padding-bottom:50px;">
             <div class="row" style="margin-top:20px;">
@@ -221,7 +227,7 @@ $deadline = $row["rental_deadline"];
         </div>
         <?php
         }
-        else if($role == "2"){
+        else if($role == "1"){
         ?>
         <div class="container container-sub" style="overflow:scroll; height:auto; padding-bottom:50px;">
             <div class="row" style="margin-top:20px;">

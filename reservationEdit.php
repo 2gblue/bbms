@@ -30,10 +30,12 @@ $role = $_SESSION["role"];
 $rentID = $_GET['historyid'];
 
 // Retrieve history data from the database with pagination and search criteria
-$sql = "SELECT book.*, bor.*, h.*
-        FROM ((history h 
+$sql = "SELECT book.*, bor.*, h.*, hs.status_name, u.*
+        FROM ((((history h 
+        INNER JOIN history_status hs ON h.status_ID = hs.status_ID) 
         INNER JOIN borrow bor ON h.borrowID = bor.borrowID) 
         INNER JOIN book book ON bor.bookID  = book.id) 
+        INNER JOIN user u ON h.id = u.id) 
         WHERE h.rental_ID = '$rentID'";
 
 $result = mysqli_query($conn, $sql);
@@ -43,15 +45,19 @@ $row = mysqli_fetch_assoc( $result );
 $bookCover = str_replace("../", "", $row["bookCover"]);
 $bookTitle = $row["bookTitle"]; //book connect to book books
 $isbn = $row["date"]; //borrow date
-$author = $row["authorName"]; //borrow date
-$publication = $row["publicationCompany"];
-$genre = $row["genre"];
-$pages = $row["pagesNumber"];
 
 //borrow & rental info from the database
 $time = $row["time"];
 $date = $row["date"];
 $deadline = $row["rental_deadline"];
+$status= $row["status_name"];
+$remark = $row["remark"];
+
+//the user who borrow, info
+$name = $row["user_fullName"];
+$matric = $row["user_matric"];
+$faculty = $row["user_faculty"];
+$phone = $row["user_phone"];
 ?>
 
 <!DOCTYPE html>
@@ -114,9 +120,6 @@ $deadline = $row["rental_deadline"];
         <h2 style="text-align:center;"><u>Rental Details</u></h2>
         <br>
 
-        <?php 
-        if($role == "1"){
-        ?>
         <div class="container container-sub" style="overflow:scroll; height:auto; padding-bottom:50px;">
             <div class="row" style="margin-top:20px;">
                 <div class="col-md-12">
@@ -171,6 +174,28 @@ $deadline = $row["rental_deadline"];
                         </div>
                         <div class="col" style="margin-left:-750px; margin-top:-10px;">
                             <input type="text" class="form-control" id="isbn" name="isbn" value="<?php echo htmlspecialchars($isbn); ?>" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="status" class="form-label"><b>Status</b></label>
+                        </div>
+                        <div class="col" style="margin-top:-13px; margin-left:-360px;">
+                            <div class="input-group-append">
+                            <select class="custom-select" id="statusid" style="border-radius: 5px; padding:10px;">
+                            <option selected><?php echo htmlspecialchars($status); ?></option>
+                            <option value="1">Borrowing</option>
+                            <option value="2">Returned</option>
+                            <option value="3">Missing</option>
+                            <option value="4">Damaged</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="col" style="margin-right:-400px; margin-left:-300px;">
+                            <label for="remark" class="form-label"><b>Remark</b></label>
+                        </div>
+                        <div class="col" style="margin-top:-10px;">
+                            <input type="text" class="form-control" id="remark" name="remark" value="<?php echo htmlspecialchars($remark); ?>">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -219,111 +244,7 @@ $deadline = $row["rental_deadline"];
                 </div>
             </div>
         </div>
-        <?php
-        }
-        else if($role == "2"){
-        ?>
-        <div class="container container-sub" style="overflow:scroll; height:auto; padding-bottom:50px;">
-            <div class="row" style="margin-top:20px;">
-                <div class="col-md-12">
-                    <div class="row mb-3">
-                        <div class="col">
-                            <br>
-                            <?php if (!empty($bookCover)) : ?>
-                                <img src="<?php echo htmlspecialchars($bookCover); ?>" alt="Book Cover" style="max-width: 40%; height: auto;">
-                            <?php else : ?>
-                                <p>No book cover available</p>
-                            <?php endif; ?>
-                        </div>
-                        <div class="col">
-                            <div class="row mb-3">
-                                <div class="col" style="margin-right:-300px; margin-left:250px;">
-                                    <label for="time" class="form-label"><b>Time</b></label>
-                                </div>
-                                <div class="col" style="margin-left:150px; margin-top:-10px;">
-                                    <input type="text" class="form-control" id="time" name="time" value="<?php echo htmlspecialchars($time); ?>" readonly>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col" style="margin-right:-300px; margin-left:250px;">
-                                    <label for="date" class="form-label"><b>Date</b></label>
-                                </div>
-                                <div class="col" style="margin-left:150px; margin-top:-10px;">
-                                    <input type="text" class="form-control" id="date" name="date" value="<?php echo htmlspecialchars($date); ?>" readonly>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col" style="margin-right:-300px; margin-left:250px;">
-                                    <label for="deadline" class="form-label"><b>Deadline</b></label>
-                                </div>
-                                <div class="col" style="margin-left:150px; margin-top:-10px;">
-                                    <input type="text" class="form-control" id="deadline" name="deadline" value="<?php echo htmlspecialchars($deadline); ?>" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="bookTitle" class="form-label"><b>Book Title</b></label>
-                        </div>
-                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
-                            <input type="text" class="form-control" id="bookTitle" name="bookTitle" value="<?php echo $bookTitle; ?>" readonly>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="isbn" class="form-label"><b>ISBN</b></label>
-                        </div>
-                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
-                            <input type="text" class="form-control" id="isbn" name="isbn" value="<?php echo htmlspecialchars($isbn); ?>" readonly>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="authorName" class="form-label"><b>Author Name</b></label>
-                        </div>
-                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
-                            <input type="text" class="form-control" id="authorName" name="authorName" value="<?php echo htmlspecialchars($author); ?>" readonly>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="publicationCompany" class="form-label"><b>Publication</b></label>
-                        </div>
-                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
-                            <input type="text" class="form-control" id="publicationCompany" name="publicationCompany" value="<?php echo htmlspecialchars($publication); ?>" readonly>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="genre" class="form-label"><b>Genre</b></label>
-                        </div>
-                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
-                            <input type="text" class="form-control" id="genre" name="genre" value="<?php echo htmlspecialchars($genre); ?>" readonly>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="pagenum" class="form-label"><b>Number of Pages</b></label>
-                        </div>
-                        <div class="col" style="margin-left:-750px; margin-top:-10px;">
-                            <input type="text" class="form-control" id="pagenum" name="pagenum" value="<?php echo htmlspecialchars($pages); ?>" readonly>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                           <!-- Previous Page button -->
-                            <button class="btn btn-success" type="button" id="button-addon2" style="z-index: 10; position:absolute; right: 12.5%;" onclick="history.back();">Back</button>
-                        </div>
-                    </div>
-                        
-                </div>
-            </div>
-        </div>
-        <?php
-        }
-        ?>
+
         <script src="./resources/js/navbar.js" defer></script>
 
         </div>

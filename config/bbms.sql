@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 18, 2024 at 03:44 PM
+-- Generation Time: May 19, 2024 at 10:48 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -76,9 +76,9 @@ CREATE TABLE `borrow` (
 --
 
 INSERT INTO `borrow` (`borrowID`, `bookID`, `userID`, `time`, `date`) VALUES
-(1, 1, 1, '', '2024-05-18'),
-(2, 4, 1, '', '2024-05-18'),
-(3, 2, 1, '', '2024-05-18');
+(1, 1, 1, '1405', '2024-05-18'),
+(2, 4, 1, '0915', '2024-05-18'),
+(3, 2, 1, '1212', '2024-05-18');
 
 -- --------------------------------------------------------
 
@@ -137,17 +137,21 @@ CREATE TABLE `user` (
   `id` int(5) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` tinyint(5) DEFAULT NULL
+  `role` tinyint(5) DEFAULT NULL,
+  `user_fullName` varchar(255) NOT NULL,
+  `user_matric` varchar(7) DEFAULT NULL,
+  `user_faculty` varchar(255) DEFAULT NULL,
+  `user_phone` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `password`, `role`) VALUES
-(1, 'user', 'test', 1),
-(2, 'staff', 'test', 2),
-(3, 'aniz', 'test', 1);
+INSERT INTO `user` (`id`, `username`, `password`, `role`, `user_fullName`, `user_matric`, `user_faculty`, `user_phone`) VALUES
+(1, 'user', 'test', 1, 'FARHAN MAHDINI', 'TA19023', 'FACULTY OF MECHANICAL AND ENGINEERING', '010-809 8366'),
+(2, 'staff', 'test', 2, 'ANIS NABIHAH', '', '', '011-2757 2455'),
+(3, 'aniz', 'test', 1, 'ANI ZAHIRAH', 'CB21102', 'FACULTY OF COMPUTING', '011-6955 1942');
 
 --
 -- Indexes for dumped tables

@@ -37,10 +37,22 @@ $role = $_SESSION["role"];
 
 // Retrieve history data from the database with pagination and search criteria
 if ($role == "1") {
-    $sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.id = '$userID' AND h.archived = 1";
+    $sql = "SELECT h.*, hs.status_name, u.id, bor.*, bo.bookTitle 
+    FROM ((((history h 
+    INNER JOIN history_status hs ON h.status_ID = hs.status_ID) 
+    INNER JOIN user u ON h.id = u.id) 
+    INNER JOIN borrow bor ON h.borrowID  = bor.borrowID) INNER JOIN 
+    book bo ON bor.bookID = bo.id) 
+    WHERE h.id = '$userID' AND h.archived = 1";
 }
 else if ($role == "2"){
-    $sql = "SELECT h.*, hs.status_name, u.id FROM ((history h INNER JOIN history_status hs ON h.status_ID = hs.status_ID) INNER JOIN user u ON h.id = u.id) WHERE h.archived = 1";
+    $sql = "SELECT h.*, hs.status_name, u.id, bor.*, bo.bookTitle 
+    FROM ((((history h 
+    INNER JOIN history_status hs ON h.status_ID = hs.status_ID) 
+    INNER JOIN user u ON h.id = u.id) 
+    INNER JOIN borrow bor ON h.borrowID  = bor.borrowID) 
+    INNER JOIN book bo ON bor.bookID = bo.id) 
+    WHERE h.archived = 1";
 }
 
 $sql .= " LIMIT $start_from, $records_per_page";
@@ -84,7 +96,7 @@ $total_pages = ceil($total_records / $records_per_page);
                     <a class="navbar-brand navbar-link" href="./homepage.php">Home</a>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="./bookCatalogue.php">Browse Books</a>
+                    <a class="navbar-brand navbar-link" href="./bookCatalogueManage.php">Browse Books</a>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Rentals</a>
@@ -161,8 +173,8 @@ $total_pages = ceil($total_records / $records_per_page);
                             // output data of each row
                                 while($row = mysqli_fetch_assoc($result)){
                                 $rentID = $row["rental_ID"];
-                                $bookTitle = $row["user_fullName"]; //book connect to book books
-                                $date = $row["complaint_Date"]; //borrow date
+                                $bookTitle = $row["bookTitle"]; //book connect to book books
+                                $date = $row["date"]; //borrow date
                                 $deadline = $row["rental_deadline"];
 	                            $status = $row["status_name"];
                             ?>	
@@ -176,7 +188,7 @@ $total_pages = ceil($total_records / $records_per_page);
                                 <?php 
                                 if ($role == "2") {
                                 ?>
-                                <a><button class="btn btn-light" type="button" onclick="window.location.href='/FKEduSearch/Complaint/User/view.php?comid=<?php echo $complainid; ?>';"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brush-fill" viewBox="0 0 16 16"><path d="M15.825.12a.5.5 0 0 1 .132.584c-1.53 3.43-4.743 8.17-7.095 10.64a6.1 6.1 0 0 1-2.373 1.534c-.018.227-.06.538-.16.868-.201.659-.667 1.479-1.708 1.74a8.1 8.1 0 0 1-3.078.132 4 4 0 0 1-.562-.135 1.4 1.4 0 0 1-.466-.247.7.7 0 0 1-.204-.288.62.62 0 0 1 .004-.443c.095-.245.316-.38.461-.452.394-.197.625-.453.867-.826.095-.144.184-.297.287-.472l.117-.198c.151-.255.326-.54.546-.848.528-.739 1.201-.925 1.746-.896q.19.012.348.048c.062-.172.142-.38.238-.608.261-.619.658-1.419 1.187-2.069 2.176-2.67 6.18-6.206 9.117-8.104a.5.5 0 0 1 .596.04"/></svg></button></a> 
+                                <a><button class="btn btn-light" type="button" onclick="window.location.href='/bbms/reservationEdit.php?historyid=<?php echo $rentID; ?>';"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brush-fill" viewBox="0 0 16 16"><path d="M15.825.12a.5.5 0 0 1 .132.584c-1.53 3.43-4.743 8.17-7.095 10.64a6.1 6.1 0 0 1-2.373 1.534c-.018.227-.06.538-.16.868-.201.659-.667 1.479-1.708 1.74a8.1 8.1 0 0 1-3.078.132 4 4 0 0 1-.562-.135 1.4 1.4 0 0 1-.466-.247.7.7 0 0 1-.204-.288.62.62 0 0 1 .004-.443c.095-.245.316-.38.461-.452.394-.197.625-.453.867-.826.095-.144.184-.297.287-.472l.117-.198c.151-.255.326-.54.546-.848.528-.739 1.201-.925 1.746-.896q.19.012.348.048c.062-.172.142-.38.238-.608.261-.619.658-1.419 1.187-2.069 2.176-2.67 6.18-6.206 9.117-8.104a.5.5 0 0 1 .596.04"/></svg></button></a> 
                                 <?php 
                                 }
                                 ?>

@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                     <a class="navbar-brand navbar-link" href="#">Rentals</a>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="#">History</a>
+                    <a class="navbar-brand navbar-link" href="./reservationHistory.php">History</a>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Analytics</a>

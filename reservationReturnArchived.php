@@ -36,14 +36,14 @@ $userID = $_SESSION["id"];
 $role = $_SESSION["role"];
 
 // Retrieve history data from the database with pagination and search criteria
-if($role == "1"){
+if ($role == "1") {
     $sql = "SELECT h.*, hs.status_name, u.id, bor.*, bo.bookTitle 
-            FROM ((((history h 
-            INNER JOIN history_status hs ON h.status_ID = hs.status_ID) 
-            INNER JOIN user u ON h.id = u.id) 
-            INNER JOIN borrow bor ON h.borrowID  = bor.borrowID) 
-            INNER JOIN book bo ON bor.bookID = bo.id) 
-            WHERE h.id = '$userID' AND h.archived = 0 AND hs.status_ID <> 2";
+    FROM ((((history h 
+    INNER JOIN history_status hs ON h.status_ID = hs.status_ID) 
+    INNER JOIN user u ON h.id = u.id) 
+    INNER JOIN borrow bor ON h.borrowID  = bor.borrowID) INNER JOIN 
+    book bo ON bor.bookID = bo.id) 
+    WHERE h.id = '$userID' AND h.archived = 1 AND hs.status_ID = 2";
 }
 else if ($role == "2"){
     $sql = "SELECT h.*, hs.status_name, u.id, bor.*, bo.bookTitle 
@@ -52,7 +52,7 @@ else if ($role == "2"){
     INNER JOIN user u ON h.id = u.id) 
     INNER JOIN borrow bor ON h.borrowID  = bor.borrowID) 
     INNER JOIN book bo ON bor.bookID = bo.id) 
-    WHERE h.archived = 0 AND hs.status_ID <> 2";
+    WHERE h.archived = 1 AND hs.status_ID = 2";
 }
 
 $sql .= " LIMIT $start_from, $records_per_page";
@@ -72,18 +72,6 @@ $total_pages = ceil($total_records / $records_per_page);
 
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation History</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="./custom_css/navbar.css">
-    <link rel="stylesheet" href="./custom_css/layout.css">
-    <link rel="stylesheet" href="./custom_css/reservationHistory.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-</head>
 
 <style>
 .dropbtn {
@@ -124,6 +112,17 @@ $total_pages = ceil($total_records / $records_per_page);
 .dropdown:hover .dropbtn {background-color: #565676;}
 </style>
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="./custom_css/navbar.css">
+    <link rel="stylesheet" href="./custom_css/layout.css">
+    <link rel="stylesheet" href="./custom_css/reservationHistory.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
 <!-- Top Nav -->
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -141,14 +140,8 @@ $total_pages = ceil($total_records / $records_per_page);
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Rentals</a>
                 </div>
-                <div class="col" style="margin-top:14px;">
-                    <div class="dropdown">
-                        <a class="dropbtn">History</a>
-                        <div class="dropdown-content">
-                            <a href="./reservationHistory.php">Reservation History</a>
-                            <a href="./reservationReturned.php">Returned</a>
-                        </div>
-                    </div>
+                <div class="col">
+                    <a class="navbar-brand navbar-link" href="./reservationHistory.php">History</a>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Analytics</a>
@@ -170,13 +163,13 @@ $total_pages = ceil($total_records / $records_per_page);
 
 
     <div class="container container-main">
-        <h2 style="text-align:center;"><u>Book Rental History</u></h2>
+        <h2 style="text-align:center;"><u>Archives</u></h2>
         <br>
         <div class="container container-sub">
             <div class="row">
                 <div class="col-md-4">
                     <!-- Search bar -->
-                    <form class="input-group mb-3" action="reservationSearch.php" method="post">
+                    <form class="input-group mb-3" action="reservationSearchReturnArc.php" method="post">
                         <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon2" name="search">
                         <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
                             <i class='bx bx-search-alt-2'></i></button>
@@ -201,14 +194,10 @@ $total_pages = ceil($total_records / $records_per_page);
                         </ul>
                     </nav>
                 </div>
-                <div class="row">
-                    <!-- Archive Button -->
-                    <p>
-                    <button class="btn btn-success" type="button" id="button-addon2" style="z-index: 10; position:absolute; right: 12.5%;" onclick="window.location.href='/bbms/reservationArchive.php';">Archive</button>
-                    </p>
-                </div>
             </div>
+            
             <br><br>
+
                 <!-- List of Reservations History -->
                 <form method="post">
                     <table border="1" class="table table-hover" style="width: 100%">
@@ -245,8 +234,6 @@ $total_pages = ceil($total_records / $records_per_page);
                                 }
                                 ?>
                                 
-                                <a><button class="btn btn-light" type="button" onclick="Confirm()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16"><path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/></svg></button></a>
-                                
 		                        </td>
 	                    </tr>
                         <?php
@@ -266,15 +253,3 @@ $total_pages = ceil($total_records / $records_per_page);
 </body>
 
 </html>
-
-<script>
-function Confirm() {
-  let text = "Are you sure you want to ARCHIVE this history?";
-  if (confirm(text) == true) {
-    location.href = '/bbms/controllers/insertHistoryController.php?rent=<?php echo $rentID?>';
-  } else {
-    text = "You canceled!";
-  }
-  document.getElementById("demo").innerHTML = text;
-}
-</script>

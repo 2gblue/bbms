@@ -43,7 +43,7 @@ if ($role == "1") {
     INNER JOIN user u ON h.id = u.id) 
     INNER JOIN borrow bor ON h.borrowID  = bor.borrowID) INNER JOIN 
     book bo ON bor.bookID = bo.id) 
-    WHERE h.id = '$userID' AND h.archived = 1";
+    WHERE h.id = '$userID' AND hs.status_ID <> 2 AND h.archived = 1";
 }
 else if ($role == "2"){
     $sql = "SELECT h.*, hs.status_name, u.id, bor.*, bo.bookTitle 
@@ -52,7 +52,7 @@ else if ($role == "2"){
     INNER JOIN user u ON h.id = u.id) 
     INNER JOIN borrow bor ON h.borrowID  = bor.borrowID) 
     INNER JOIN book bo ON bor.bookID = bo.id) 
-    WHERE h.archived = 1";
+    WHERE h.archived = 1 AND hs.status_ID <> 2";
 }
 
 $sql .= " LIMIT $start_from, $records_per_page";
@@ -72,6 +72,45 @@ $total_pages = ceil($total_records / $records_per_page);
 
 <!DOCTYPE html>
 <html lang="en">
+
+<style>
+.dropbtn {
+  background-color:#1F2529;
+  color: white;
+  padding: 16px;
+  font-size: 14px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #D8DCFF;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #7749F8;
+    color:white;
+}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #565676;}
+</style>
 
 <head>
     <meta charset="UTF-8">
@@ -101,8 +140,14 @@ $total_pages = ceil($total_records / $records_per_page);
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Rentals</a>
                 </div>
-                <div class="col">
-                    <a class="navbar-brand navbar-link" href="./reservationHistory.php">History</a>
+                <div class="col" style="margin-top:14px;">
+                    <div class="dropdown">
+                        <a class="dropbtn">History</a>
+                        <div class="dropdown-content">
+                            <a href="./reservationHistory.php">Reservation History</a>
+                            <a href="./reservationReturned.php">Returned</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Analytics</a>
@@ -184,7 +229,7 @@ $total_pages = ceil($total_records / $records_per_page);
                                 <td><?php echo $deadline; ?></td>
                                 <td><?php echo $status; ?></td>
 		                        <td>
-                                <a><button class="btn btn-light" type="button" onclick="window.location.href='/bbms/reservationView.php';"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg></button></a> 
+                                <a><button class="btn btn-light" type="button" onclick="window.location.href='/bbms/reservationView.php?historyid=<?php echo $rentID; ?>';"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg></button></a> 
                                 <?php 
                                 if ($role == "2") {
                                 ?>

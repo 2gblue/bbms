@@ -10,6 +10,8 @@ if ($_SERVER["REQUEST_METHOD"]) {
     $sql = "UPDATE history SET archived = 1 WHERE rental_ID = '$rentID'";
     $result = mysqli_query($conn,$sql) or die ("Could not add a query");
 
-	echo "<script type = 'text/javascript'> window.location='/bbms/reservationHistory.php' </script>";
+	$previous_url = $_SERVER['HTTP_REFERER'];
+    header('Location: ' . $previous_url);
+    exit;
 }
 ?>

@@ -30,8 +30,9 @@ $role = $_SESSION["role"];
 $rentID = $_GET['historyid'];
 
 // Retrieve history data from the database with pagination and search criteria
-$sql = "SELECT book.*, bor.*, h.*
-        FROM ((history h 
+$sql = "SELECT book.*, bor.*, h.*, u.*
+        FROM (((history h 
+        INNER JOIN user u ON h.id = u.id) 
         INNER JOIN borrow bor ON h.borrowID = bor.borrowID) 
         INNER JOIN book book ON bor.bookID  = book.id) 
         WHERE h.rental_ID = '$rentID'";
@@ -59,6 +60,45 @@ $matric = $row["user_matric"];
 $faculty = $row["user_faculty"];
 $phone = $row["user_phone"];
 ?>
+
+<style>
+.dropbtn {
+  background-color:#1F2529;
+  color: white;
+  padding: 16px;
+  font-size: 14px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #D8DCFF;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #7749F8;
+    color:white;
+}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #565676;}
+</style>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -91,8 +131,14 @@ $phone = $row["user_phone"];
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Rentals</a>
                 </div>
-                <div class="col">
-                    <a class="navbar-brand navbar-link" href="./reservationHistory.php">History</a>
+                <div class="col" style="margin-top:14px;">
+                    <div class="dropdown">
+                        <a class="dropbtn">History</a>
+                        <div class="dropdown-content">
+                            <a href="./reservationHistory.php">Reservation History</a>
+                            <a href="./reservationReturned.php">Returned</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Analytics</a>

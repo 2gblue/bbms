@@ -38,22 +38,22 @@ $search = $_POST["search"];
 
 // Retrieve history data from the database with pagination and search criteria
 if ($role == "1") {
-    $sql = "SELECT h.*, hs.status_name, u.id 
-            FROM ((history h 
+    $sql = "SELECT h.*, hs.status_name, u.id, bo.*, bor.date
+            FROM ((((history h 
             INNER JOIN history_status hs ON h.status_ID = hs.status_ID) 
             INNER JOIN user u ON h.id = u.id) 
             INNER JOIN borrow bor ON h.borrowID  = bor.borrowID) 
             INNER JOIN book bo ON bor.bookID = bo.id) 
-            WHERE h.id = '$userID' AND h.archived = 1 AND h.rental_ID = '$search'";
+            WHERE h.id = '$userID' AND h.archived = 1 ANd hs.status_ID <> 2 AND h.rental_ID = '$search'";
 }
 else if($role == "2"){
-    $sql = "SELECT h.*, hs.status_name, u.id 
-            FROM ((history h 
+    $sql = "SELECT h.*, hs.status_name, u.id, bo.*, bor.date
+            FROM ((((history h 
             INNER JOIN history_status hs ON h.status_ID = hs.status_ID) 
             INNER JOIN user u ON h.id = u.id) 
             INNER JOIN borrow bor ON h.borrowID  = bor.borrowID) 
             INNER JOIN book bo ON bor.bookID = bo.id) 
-            WHERE h.archived = 1 AND h.rental_ID = '$search'";
+            WHERE h.archived = 1 AND hs.status_ID <> 2 AND h.rental_ID = '$search'";
 }
 
 $sql .= " LIMIT $start_from, $records_per_page";
@@ -72,6 +72,45 @@ $total_pages = ceil($total_records / $records_per_page);
 
 <!DOCTYPE html>
 <html lang="en">
+
+<style>
+.dropbtn {
+  background-color:#1F2529;
+  color: white;
+  padding: 16px;
+  font-size: 14px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #D8DCFF;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #7749F8;
+    color:white;
+}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #565676;}
+</style>
 
 <!-- Header -->
 <head>
@@ -102,8 +141,14 @@ $total_pages = ceil($total_records / $records_per_page);
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Rentals</a>
                 </div>
-                <div class="col">
-                    <a class="navbar-brand navbar-link" href="./reservationHistory.php">History</a>
+                <div class="col" style="margin-top:14px;">
+                    <div class="dropdown">
+                        <a class="dropbtn">History</a>
+                        <div class="dropdown-content">
+                            <a href="./reservationHistory.php">Reservation History</a>
+                            <a href="./reservationReturned.php">Returned</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Analytics</a>
@@ -159,6 +204,8 @@ $total_pages = ceil($total_records / $records_per_page);
                 </div>
             </div>
 
+            <br><br>
+            
             <div>
                 <!-- List of Reservations History -->
                 <form method="post">
@@ -200,6 +247,7 @@ $total_pages = ceil($total_records / $records_per_page);
                         <?php
                                 }
                             }
+                            //script for other outputs for the search
                             else if($search == null){
                                 $message = "Please type in the search box!";
                                 echo "<script type='text/javascript'>alert('$message');</script>";
@@ -221,3 +269,16 @@ $total_pages = ceil($total_records / $records_per_page);
 </body>
 
 </html>
+
+<script>
+    //script for archiving reservation history confirmation
+function Confirm() {
+  let text = "Are you sure you want to ARCHIVE this history?";
+  if (confirm(text) == true) {
+    location.href = '/bbms/controllers/insertHistoryController.php?rent=<?php echo $rentID?>';
+  } else {
+    text = "You canceled!";
+  }
+  document.getElementById("demo").innerHTML = text;
+}
+</script>

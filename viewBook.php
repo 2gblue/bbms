@@ -90,8 +90,7 @@ $user_role = isset($_SESSION["role"]) ? $_SESSION["role"] : null;
                     <a class="navbar-brand navbar-link" href="./homepage.php">Home</a>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="#" id="bookCatalogueLink"
-                        data-role="<?php echo isset($_SESSION["role"]) ? $_SESSION["role"] : ""; ?>">Browse Books</a>
+                    <a class="navbar-brand navbar-link" href="#" id="bookCatalogueLink" data-role="<?php echo isset($_SESSION["role"]) ? $_SESSION["role"] : ""; ?>">Browse Books</a>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="./rentalBook.php">Rentals</a>
@@ -105,8 +104,7 @@ $user_role = isset($_SESSION["role"]) ? $_SESSION["role"] : null;
             </div>
             <form class="d-flex" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <div class="dropdown">
-                    <button class="btn btn-outline-light" type="button" id="dropdownMenuButton"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-outline-light" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                         <?php echo htmlspecialchars($_SESSION["username"]); ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
@@ -126,10 +124,9 @@ $user_role = isset($_SESSION["role"]) ? $_SESSION["role"] : null;
                     <div class="row mb-3">
                         <div class="col">
                             <br>
-                            <?php if (!empty($bookCover)): ?>
-                                <img src="<?php echo htmlspecialchars($bookCover); ?>" alt="Book Cover"
-                                    style="max-width: 40%; height: auto;">
-                            <?php else: ?>
+                            <?php if (!empty($bookCover)) : ?>
+                                <img src="<?php echo htmlspecialchars($bookCover); ?>" alt="Book Cover" style="max-width: 40%; height: auto;">
+                            <?php else : ?>
                                 <p>No book cover available</p>
                             <?php endif; ?>
                         </div>
@@ -138,57 +135,48 @@ $user_role = isset($_SESSION["role"]) ? $_SESSION["role"] : null;
                     <div class="row mb-3">
                         <div class="col">
                             <label for="bookTitle" class="form-label"><b>Book Title</b></label>
-                            <input type="text" class="form-control" id="bookTitle" name="bookTitle"
-                                value="<?php echo htmlspecialchars($bookTitle); ?>" readonly>
+                            <input type="text" class="form-control" id="bookTitle" name="bookTitle" value="<?php echo htmlspecialchars($bookTitle); ?>" readonly>
                         </div>
                         <div class="col">
                             <label for="pagesNumber" class="form-label"><b>Pages Number</b></label>
-                            <input type="number" class="form-control" id="pagesNumber" name="pagesNumber"
-                                value="<?php echo htmlspecialchars($pagesNumber); ?>" readonly>
+                            <input type="number" class="form-control" id="pagesNumber" name="pagesNumber" value="<?php echo htmlspecialchars($pagesNumber); ?>" readonly>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
                             <label for="authorName" class="form-label"><b>Author Name</b></label>
-                            <input type="text" class="form-control" id="authorName" name="authorName"
-                                value="<?php echo htmlspecialchars($authorName); ?>" readonly>
+                            <input type="text" class="form-control" id="authorName" name="authorName" value="<?php echo htmlspecialchars($authorName); ?>" readonly>
                         </div>
                         <div class="col">
                             <label for="quantity" class="form-label"><b>Quantity</b></label>
-                            <input type="number" class="form-control" id="quantity" name="quantity"
-                                value="<?php echo htmlspecialchars($quantity); ?>" readonly>
+                            <input type="number" class="form-control" id="quantity" name="quantity" value="<?php echo htmlspecialchars($quantity); ?>" readonly>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
                             <label for="publicationCompany" class="form-label"><b>Publication Company</b></label>
-                            <input type="text" class="form-control" id="publicationCompany" name="publicationCompany"
-                                value="<?php echo htmlspecialchars($publicationCompany); ?>" readonly>
+                            <input type="text" class="form-control" id="publicationCompany" name="publicationCompany" value="<?php echo htmlspecialchars($publicationCompany); ?>" readonly>
                         </div>
                         <div class="col">
                             <label for="genre" class="form-label"><b>Genre</b></label>
-                            <input type="text" class="form-control" id="genre" name="genre"
-                                value="<?php echo htmlspecialchars($genre); ?>" readonly>
+                            <input type="text" class="form-control" id="genre" name="genre" value="<?php echo htmlspecialchars($genre); ?>" readonly>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
                             <label for="isbn" class="form-label"><b>ISBN</b></label>
-                            <input type="text" class="form-control" id="isbn" name="isbn"
-                                value="<?php echo htmlspecialchars($isbn); ?>" readonly>
+                            <input type="text" class="form-control" id="isbn" name="isbn" value="<?php echo htmlspecialchars($isbn); ?>" readonly>
                         </div>
                     </div>
                 </div>
             </div>
-            <?php if ($user_role == 1): ?>
-                <button type="button" class="btn btn-danger" style="margin-bottom:20px;" data-bs-toggle="modal"
-                    data-bs-target="#rentBookModal">Rent Now</button>
+            <?php if ($user_role == 1) : ?>
+                <button type="button" class="btn btn-danger" style="margin-bottom:20px;" data-bs-toggle="modal" data-bs-target="#rentBookModal">Rent Now</button>
             <?php endif; ?>
         </div>
 
         <!-- Rent Book Modal -->
-        <div class="modal fade" id="rentBookModal" tabindex="-1" aria-labelledby="rentBookModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="rentBookModal" tabindex="-1" aria-labelledby="rentBookModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -203,8 +191,7 @@ $user_role = isset($_SESSION["role"]) ? $_SESSION["role"] : null;
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="3"
-                                    required></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                             </div>
                             <input type="hidden" name="bookID" value="<?php echo $view_id; ?>">
                         </div>
@@ -218,7 +205,7 @@ $user_role = isset($_SESSION["role"]) ? $_SESSION["role"] : null;
         </div>
 
     </div>
-
+    <script src="./resources/js/navbar.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

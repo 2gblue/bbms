@@ -77,8 +77,7 @@ $total_pages = ceil($total_records / $records_per_page);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservation History</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="./custom_css/navbar.css">
     <link rel="stylesheet" href="./custom_css/layout.css">
     <link rel="stylesheet" href="./custom_css/reservationHistory.css">
@@ -91,6 +90,7 @@ $total_pages = ceil($total_records / $records_per_page);
         color: white;
         padding: 16px;
         font-size: 14px;
+        text-decoration: none;
     }
 
     .dropdown {
@@ -141,7 +141,7 @@ $total_pages = ceil($total_records / $records_per_page);
                     <a class="navbar-brand navbar-link" href="./homepage.php">Home</a>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="./bookCatalogueManage.php">Browse Books</a>
+                    <a class="navbar-brand navbar-link" href="#" id="bookCatalogueLink" data-role="<?php echo isset($_SESSION["role"]) ? $_SESSION["role"] : ""; ?>">Browse Books</a>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="./rentalBook.php">Rentals</a>
@@ -161,8 +161,7 @@ $total_pages = ceil($total_records / $records_per_page);
             </div>
             <form class="d-flex" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <div class="dropdown">
-                    <button class="btn btn-outline-light" type="button" id="dropdownMenuButton"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-outline-light" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                         <?php echo htmlspecialchars($_SESSION["username"]); ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
@@ -188,18 +187,15 @@ $total_pages = ceil($total_records / $records_per_page);
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                             <li class="page-item <?php echo ($current_page == 1) ? 'disabled' : ''; ?>">
-                                <a class="page-link"
-                                    href="<?php echo ($current_page == 1) ? '#' : 'rentalBook.php?page=' . ($current_page - 1); ?>">Prev</a>
+                                <a class="page-link" href="<?php echo ($current_page == 1) ? '#' : 'rentalBook.php?page=' . ($current_page - 1); ?>">Prev</a>
                             </li>
-                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                            <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
                                 <li class="page-item <?php echo ($i == $current_page) ? 'active' : ''; ?>">
-                                    <a class="page-link" style="background-color: #7749F8;"
-                                        href="rentalBook.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                    <a class="page-link" style="background-color: #7749F8;" href="rentalBook.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
                                 </li>
                             <?php endfor; ?>
                             <li class="page-item <?php echo ($current_page == $total_pages) ? 'disabled' : ''; ?>">
-                                <a class="page-link"
-                                    href="<?php echo ($current_page == $total_pages) ? '#' : 'rentalBook.php?page=' . ($current_page + 1); ?>">Next</a>
+                                <a class="page-link" href="<?php echo ($current_page == $total_pages) ? '#' : 'rentalBook.php?page=' . ($current_page + 1); ?>">Next</a>
                             </li>
                         </ul>
                     </nav>
@@ -219,7 +215,7 @@ $total_pages = ceil($total_records / $records_per_page);
                         <th class="table-secondary" scope="col">Status</th>
                         <th class="table-secondary" scope="col">Action</th>
                     </tr>
-                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                    <?php while ($row = mysqli_fetch_assoc($result)) : ?>
                         <tr>
                             <td><?php echo htmlspecialchars($row['rental_ID']); ?></td>
                             <td><?php echo htmlspecialchars($row['bookTitle']); ?></td>
@@ -232,11 +228,9 @@ $total_pages = ceil($total_records / $records_per_page);
                                 $currentDate = new DateTime();
                                 $interval = $borrowDate->diff($currentDate);
                                 if ($interval->days <= 1) {
-                                    ?>
-                                    <a href="editRental.php?rentalID=<?php echo $row['rental_ID']; ?>"
-                                        class="btn btn-primary">Edit</a>
-                                    <a href="cancelController.php?rentalID=<?php echo $row['rental_ID']; ?>"
-                                        class="btn btn-danger">Cancel</a>
+                                ?>
+                                    <a href="editRental.php?rentalID=<?php echo $row['rental_ID']; ?>" class="btn btn-primary">Edit</a>
+                                    <a href="cancelController.php?rentalID=<?php echo $row['rental_ID']; ?>" class="btn btn-danger">Cancel</a>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -247,9 +241,8 @@ $total_pages = ceil($total_records / $records_per_page);
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="./resources/js/navbar.js" defer></script>
 </body>
 
 </html>

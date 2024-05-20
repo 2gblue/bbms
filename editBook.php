@@ -73,7 +73,7 @@ $user_role = isset($_SESSION["role"]) ? $_SESSION["role"] : null;
                     <a class="navbar-brand navbar-link" href="./bookCatalogueManage.php">Browse Books</a>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="#">Rentals</a>
+                    <a class="navbar-brand navbar-link" href="./rentalBook.php">Rentals</a>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="./reservationHistory.php">History</a>

@@ -78,10 +78,16 @@ $total_pages = ceil($total_records / $records_per_page);
                     <a class="navbar-brand navbar-link" href="./bookCatalogueManage.php">Browse Books</a>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="#">Rentals</a>
+                    <a class="navbar-brand navbar-link" href="./rentalBook.php">Rentals</a>
                 </div>
-                <div class="col">
-                    <a class="navbar-brand navbar-link" href="./reservationHistory.php">History</a>
+                <div class="col" style="margin-top:14px;">
+                    <div class="dropdown">
+                        <a class="dropbtn">History</a>
+                        <div class="dropdown-content">
+                            <a href="./reservationHistory.php">Reservation History</a>
+                            <a href="./reservationReturned.php">Returned</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="#">Analytics</a>

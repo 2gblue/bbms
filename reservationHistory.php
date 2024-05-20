@@ -91,6 +91,7 @@ $total_pages = ceil($total_records / $records_per_page);
   color: white;
   padding: 16px;
   font-size: 14px;
+  text-decoration: none;
 }
 
 .dropdown {

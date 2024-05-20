@@ -212,7 +212,7 @@ $total_pages = ceil($total_records / $records_per_page);
                         <th class="table-secondary" scope="col">Book Name</th>
                         <th class="table-secondary" scope="col">Date</th>
                         <th class="table-secondary" scope="col">Deadline</th>
-                        <th class="table-secondary" scope="col">Status</th>
+                        <th class="table-secondary" scope="col">Description</th>
                         <th class="table-secondary" scope="col">Action</th>
                     </tr>
                     <?php while ($row = mysqli_fetch_assoc($result)) : ?>

@@ -129,7 +129,7 @@ $phone = $row["user_phone"];
                     <a class="navbar-brand navbar-link" href="./bookCatalogueManage.php">Browse Books</a>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="#">Rentals</a>
+                    <a class="navbar-brand navbar-link" href="./rentalBook.php">Rentals</a>
                 </div>
                 <div class="col" style="margin-top:14px;">
                     <div class="dropdown">

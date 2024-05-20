@@ -42,13 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                     <a class="navbar-brand navbar-link" href="#" id="bookCatalogueLink" data-role="<?php echo isset($_SESSION["role"]) ? $_SESSION["role"] : ""; ?>">Browse Books</a>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="#">Rentals</a>
+                    <a class="navbar-brand navbar-link" href="./rentalBook.php">Rentals</a>
                 </div>
                 <div class="col">
                     <a class="navbar-brand navbar-link" href="./reservationHistory.php">History</a>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="#">Analytics</a>
+                    <a class="navbar-brand navbar-link" href="">Analytics</a>
                 </div>
             </div>
             <form class="d-flex" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">

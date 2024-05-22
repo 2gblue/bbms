@@ -162,7 +162,7 @@ $phone = $row["user_phone"];
 <!-- Page Content -->
     <div class="container container-main">
 
-    <!-- Title -->
+    <!-- Title for the page -->
         <h2 style="text-align:center;"><u>Rental Details</u></h2>
         <br>
 
@@ -240,12 +240,12 @@ $phone = $row["user_phone"];
                         if ($statusid == "1" || $statusid == "3" || $statusid == "4") {
                         ?>
                         <div class="col" style="margin-top:-10px;">
-                            <select class="form-select" aria-label="Default select example" name="statusid" id="statusid" style="width:fit-content; margin-left:-270px; background-color:#FCF6F6;">
+                            <select class="form-select" aria-label="Default select example" name="statusid" id="statusid" style="width:fit-content; margin-left:-270px; background-color:#FCF6F6;" required>
                             <option selected>Please select book status</option>
                             <option value="1">Borrowing</option>
                             <option value="3">Missing</option>
                             <option value="4">Damaged</option>
-                            </select required>
+                            </select>
                         </div>
                         <?php
                         }
@@ -258,7 +258,7 @@ $phone = $row["user_phone"];
                         }
                         ?>
                             
-                        <!-- The book status -->
+                        <!-- The remark/description for the book -->
                         <div class="col" style="margin-right:-400px; margin-left:-300px;">
                             <label for="remark" class="form-label"><b>Remark</b></label>
                         </div>

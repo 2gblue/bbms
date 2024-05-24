@@ -234,7 +234,7 @@ $total_pages = ceil($total_records / $records_per_page);
                                 if ($today <= $cancelDate) {
                                     // Show the Edit and Cancel buttons
                                     echo '<a href="editRental.php?rentalID=' . $row['rental_ID'] . '" class="btn btn-primary">Edit</a>';
-                                    echo '<button onclick="Confirm(' . $row['rental_ID'] . ')" class="btn btn-danger">Cancel</button>';
+                                    echo '<a href="cancelController.php?rentalID=' . $row['rental_ID'] . '" class="btn btn-danger" onclick="return confirm(\'Are you sure you want to cancel this rental?\')">Cancel</a>';
                                 } else {
                                     // Show a message or another action if past the cancel date
                                     echo 'Past the cancel date';
@@ -251,18 +251,7 @@ $total_pages = ceil($total_records / $records_per_page);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="./resources/js/navbar.js" defer></script>
+
 </body>
 
 </html>
-
-<script>
-    function Confirm() {
-        let text = "Are you sure you want to cancel this rental?";
-        if (confirm(text) == true) {
-            location.href = 'cancelController.php?rentalID=<?php echo $rentalID ?>';
-        } else {
-            text = "You canceled!";
-        }
-        document.getElementById("demo").innerHTML = text;
-    }
-</script>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include_once "./controllers/db_connection.php";
+include "./controllers/db_connection.php";
 
 // Check if user is not logged in, redirect to login page
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
@@ -34,14 +34,18 @@ if (isset($_GET['rentalID']) && is_numeric($_GET['rentalID'])) {
             $stmt->bind_param("i", $borrowID);
             if ($stmt->execute()) {
                 $_SESSION['message'] = "Rental canceled successfully.";
+                echo "Cancellation Succesfully";
             } else {
                 $_SESSION['message'] = "Error deleting borrow record: " . $conn->error;
+                echo "Error deleting borrow record: " . $conn->error;
             }
         } else {
             $_SESSION['message'] = "Error deleting rental history: " . $conn->error;
+            echo "Error deleting rental history: " . $conn->error;
         }
     } else {
         $_SESSION['message'] = "Invalid rental ID.";
+        echo "Invalid rental ID.";
     }
     $stmt->close();
 } else {

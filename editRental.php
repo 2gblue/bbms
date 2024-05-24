@@ -9,15 +9,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-// Function to check if the rental can be edited or canceled
-function canEditOrCancel($borrowDate)
-{
-    $borrowDateTime = new DateTime($borrowDate);
-    $currentDateTime = new DateTime();
-    $interval = $currentDateTime->diff($borrowDateTime);
-    return $interval->days < 1;
-}
-
 // Retrieve rental details
 if (isset($_GET['rentalID']) && is_numeric($_GET['rentalID'])) {
     $rentalID = $_GET['rentalID'];
@@ -49,32 +40,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $newDate = $_POST['date'];
     $newDescription = $_POST['description'];
 
-    if (canEditOrCancel($rental['date'])) {
-        $sql = "UPDATE borrow SET date = ?, time = NOW() WHERE borrowID = ?";
+    // Calculate rental deadline
+    $rentalDeadline = date('Y-m-d', strtotime($newDate . ' + 7 days'));
+
+    $sql = "UPDATE borrow SET date = ?, time = NOW() WHERE borrowID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $newDate, $rental['borrowID']);
+    if ($stmt->execute()) {
+        $sql = "UPDATE history SET rental_remark = ?, rental_deadline = ? WHERE rental_ID = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("si", $newDate, $rental['borrowID']);
+        $stmt->bind_param("ssi", $newDescription, $rentalDeadline, $rentalID);
         if ($stmt->execute()) {
-            $sql = "UPDATE history SET rental_remark = ? WHERE rental_ID = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("si", $newDescription, $rentalID);
-            if ($stmt->execute()) {
-                echo "Rental updated successfully.";
-                header("location: rentalBook.php");
-                exit;
-            } else {
-                echo "Error updating rental: " . $conn->error;
-            }
+            echo "Rental updated successfully.";
+            header("location: rentalBook.php");
+            exit;
         } else {
-            echo "Error updating borrow date: " . $conn->error;
+            echo "Error updating rental: " . $conn->error;
         }
-        $stmt->close();
     } else {
-        echo "Cannot edit the rental after one day from the borrowing date.";
+        echo "Error updating borrow date: " . $conn->error;
     }
+    $stmt->close();
 }
 
 $conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

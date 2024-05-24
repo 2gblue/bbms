@@ -126,6 +126,10 @@ $total_pages = ceil($total_records / $records_per_page);
     .dropdown:hover .dropbtn {
         background-color: #565676;
     }
+
+    .btn-primary {
+        margin-right: 5px;
+    }
 </style>
 
 <!-- Top Nav -->
@@ -215,23 +219,27 @@ $total_pages = ceil($total_records / $records_per_page);
                         <th class="table-secondary" scope="col">Description</th>
                         <th class="table-secondary" scope="col">Action</th>
                     </tr>
-                    <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($row['rental_ID']); ?></td>
                             <td><?php echo htmlspecialchars($row['bookTitle']); ?></td>
                             <td><?php echo htmlspecialchars($row['date']); ?></td>
                             <td><?php echo htmlspecialchars($row['rental_deadline']); ?></td>
                             <td><?php echo htmlspecialchars($row['rental_remark']); ?></td>
-                            <td>
+                            <td style="text-align:center">
                                 <?php
-                                $borrowDate = new DateTime($row['date']);
-                                $currentDate = new DateTime();
-                                $interval = $borrowDate->diff($currentDate);
-                                if ($interval->days <= 1) {
+                                $today = date("Y-m-d");
+                                $borrowDate = date("Y-m-d", strtotime($row['date']));
+                                $cancelDate = date("Y-m-d", strtotime($borrowDate . " + 1 days"));
+                                if ($today <= $cancelDate) {
+                                    // Show the Edit and Cancel buttons
+                                    echo '<a href="editRental.php?rentalID=' . $row['rental_ID'] . '" class="btn btn-primary">Edit</a>';
+                                    echo '<button onclick="Confirm(' . $row['rental_ID'] . ')" class="btn btn-danger">Cancel</button>';
+                                } else {
+                                    // Show a message or another action if past the cancel date
+                                    echo 'Past the cancel date';
+                                }
                                 ?>
-                                    <a href="editRental.php?rentalID=<?php echo $row['rental_ID']; ?>" class="btn btn-primary">Edit</a>
-                                    <a href="cancelController.php?rentalID=<?php echo $row['rental_ID']; ?>" class="btn btn-danger">Cancel</a>
-                                <?php } ?>
                             </td>
                         </tr>
                     <?php endwhile; ?>

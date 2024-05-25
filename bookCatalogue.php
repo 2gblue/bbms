@@ -199,8 +199,19 @@ $total_pages = ceil($total_records / $records_per_page);
                                 <p class="card-text"><b>Genre:</b> <?php echo $row['genre']; ?><br><b>Quantity:</b>
                                     <?php echo $row['quantity']; ?></p>
                                 <a href="viewBook.php?view=<?php echo $row['id']; ?>" class="btn btn-info">View</a>
-                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rentBookModal"
-                                    data-bookid="<?php echo $row['id']; ?>">Rent Now</button>
+                                <?php if ($row['quantity'] > 0): ?>
+                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rentBookModal"
+                                        data-bookid="<?php echo $row['id']; ?>">Rent Now</button>
+                                <?php else: ?>
+                                    <button class="btn btn-danger" disabled>Rent Now</button>
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            document.querySelector('[data-bookid="<?php echo $row['id']; ?>"]').addEventListener("click", function () {
+                                                alert("This item is currently unavailable.");
+                                            });
+                                        });
+                                    </script>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

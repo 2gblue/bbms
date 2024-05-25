@@ -160,7 +160,7 @@ $total_pages = ceil($total_records / $records_per_page);
                     </div>
                 </div>
                 <div class="col">
-                    <a class="navbar-brand navbar-link" href="#">Analytics</a>
+                    <a class="navbar-brand navbar-link" href="./reporting.php">Analytics</a>
                 </div>
             </div>
             <form class="d-flex" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">

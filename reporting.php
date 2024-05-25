@@ -66,10 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         </div>
     </nav>
 
-    <div class="container container-main">
-        Welcome to BBMS Reporting and Analytics
-        <?php echo htmlspecialchars($_SESSION["id"]); ?>
-    </div>
+    
 
     <div class="container">
         <h2>Library Reporting and Analytics</h2>

@@ -25,7 +25,7 @@
 
             <!-- Register buttons -->
             <div class="text-center">
-                <p>Not a member? <a href="#">Register here!</a></p>
+                <p>Not a member? <a href="./register.php">Register here!</a></p>
             </div>
         </form>
     </div>

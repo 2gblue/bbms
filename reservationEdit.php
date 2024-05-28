@@ -212,7 +212,7 @@ $phone = $row["user_phone"];
                     <br>
 
                     <!-- form is to update for the book status and book remark -->
-                    <form action="/bbms/controllers/updateHistoryController.php?rent=<?php echo $rentID?>" method="post">
+                    <form action="./controllers/updateHistoryController.php?rent=<?php echo $rentID?>" method="post">
                     <div class="row mb-3">
                         <div class="col">
                             <!-- The book title -->
@@ -365,7 +365,7 @@ $phone = $row["user_phone"];
 function Confirm() {
   let text = "Are you sure the user have RETURNED the book?";
   if (confirm(text) == true) {
-    location.href = '/bbms/controllers/updateReturnHistoryController.php?rent=<?php echo $rentID?>';
+    location.href = './controllers/updateReturnHistoryController.php?rent=<?php echo $rentID?>';
   } else {
     text = "You canceled!";
   }

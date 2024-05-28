@@ -94,7 +94,7 @@ $row = $result->fetch_assoc();
                     <a class="navbar-brand navbar-link" href="#">Analytics</a>
                 </div>
 		<div class="col">
-                    <a class="navbar-brand navbar-link" href="profile.php">Profile</a>
+                    <a class="navbar-brand navbar-link" href="./profile.php">Profile</a>
                 </div>
             </div>
             <form class="d-flex" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">

@@ -166,6 +166,7 @@ $phone = $row["user_phone"];
         <h2 style="text-align:center;"><u>Rental Details</u></h2>
         <br>
 
+        <!-- the role for the user -->
         <?php 
         if($role == "2"){
         ?>
@@ -209,6 +210,8 @@ $phone = $row["user_phone"];
                         </div>
                     </div>
                     <br>
+
+                    <!-- title of the book -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="bookTitle" class="form-label"><b>Book Title</b></label>
@@ -217,6 +220,7 @@ $phone = $row["user_phone"];
                             <input type="text" class="form-control" id="bookTitle" name="bookTitle" value="<?php echo $bookTitle; ?>" readonly>
                         </div>
                     </div>
+                    <!-- isbn number for the book -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="isbn" class="form-label"><b>ISBN</b></label>
@@ -227,9 +231,12 @@ $phone = $row["user_phone"];
                     </div>
                     <div class="row mb-3">
                     </div>
+
+                    <!-- user's borrowing information -->
                     <div class="row mb-3">
                         <h2 style="text-align:left;">Borrower Info</h2>
                     </div>
+                    <!-- user's borrowing name -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="fullName" class="form-label"><b>Name</b></label>
@@ -238,6 +245,7 @@ $phone = $row["user_phone"];
                             <input type="text" class="form-control" id="fullName" name="fullName" value="<?php echo htmlspecialchars($name); ?>" readonly>
                         </div>
                     </div>
+                    <!-- user's borrowing matric ID -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="matricID" class="form-label"><b>Matric ID</b></label>
@@ -246,6 +254,7 @@ $phone = $row["user_phone"];
                             <input type="text" class="form-control" id="matricID" name="matricID" value="<?php echo htmlspecialchars($matric); ?>" readonly>
                         </div>
                     </div>
+                    <!-- user's borrowing faculty -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="faculty" class="form-label"><b>Faculty</b></label>
@@ -254,6 +263,7 @@ $phone = $row["user_phone"];
                             <input type="text" class="form-control" id="faculty" name="faculty" value="<?php echo htmlspecialchars($faculty); ?>" readonly>
                         </div>
                     </div>
+                    <!-- user's borrowing phone number -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="phone" class="form-label"><b>Phone Number</b></label>
@@ -278,6 +288,8 @@ $phone = $row["user_phone"];
         <div class="container container-sub" style="overflow:scroll; height:auto; padding-bottom:50px;">
             <div class="row" style="margin-top:20px;">
                 <div class="col-md-12">
+
+                    <!-- the cover for tthe book -->
                     <div class="row mb-3">
                         <div class="col">
                             <br>
@@ -287,6 +299,7 @@ $phone = $row["user_phone"];
                                 <p>No book cover available</p>
                             <?php endif; ?>
                         </div>
+                        <!-- user's borrowing time -->
                         <div class="col">
                             <div class="row mb-3">
                                 <div class="col" style="margin-right:-300px; margin-left:250px;">
@@ -296,6 +309,7 @@ $phone = $row["user_phone"];
                                     <input type="text" class="form-control" id="time" name="time" value="<?php echo htmlspecialchars($time); ?>" readonly>
                                 </div>
                             </div>
+                            <!-- user's borrowing date -->
                             <div class="row mb-3">
                                 <div class="col" style="margin-right:-300px; margin-left:250px;">
                                     <label for="date" class="form-label"><b>Date</b></label>
@@ -304,6 +318,7 @@ $phone = $row["user_phone"];
                                     <input type="text" class="form-control" id="date" name="date" value="<?php echo htmlspecialchars($date); ?>" readonly>
                                 </div>
                             </div>
+                            <!-- user's borrowing deadline -->
                             <div class="row mb-3">
                                 <div class="col" style="margin-right:-300px; margin-left:250px;">
                                     <label for="deadline" class="form-label"><b>Deadline</b></label>
@@ -315,6 +330,7 @@ $phone = $row["user_phone"];
                         </div>
                     </div>
                     <br>
+                    <!-- Title of the book -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="bookTitle" class="form-label"><b>Book Title</b></label>
@@ -323,6 +339,7 @@ $phone = $row["user_phone"];
                             <input type="text" class="form-control" id="bookTitle" name="bookTitle" value="<?php echo $bookTitle; ?>" readonly>
                         </div>
                     </div>
+                    <!-- isbn number of the book -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="isbn" class="form-label"><b>ISBN</b></label>
@@ -331,6 +348,7 @@ $phone = $row["user_phone"];
                             <input type="text" class="form-control" id="isbn" name="isbn" value="<?php echo htmlspecialchars($isbn); ?>" readonly>
                         </div>
                     </div>
+                    <!-- author who writes the book -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="authorName" class="form-label"><b>Author Name</b></label>
@@ -339,6 +357,7 @@ $phone = $row["user_phone"];
                             <input type="text" class="form-control" id="authorName" name="authorName" value="<?php echo htmlspecialchars($author); ?>" readonly>
                         </div>
                     </div>
+                    <!-- Publication for the book -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="publicationCompany" class="form-label"><b>Publication</b></label>
@@ -347,6 +366,7 @@ $phone = $row["user_phone"];
                             <input type="text" class="form-control" id="publicationCompany" name="publicationCompany" value="<?php echo htmlspecialchars($publication); ?>" readonly>
                         </div>
                     </div>
+                    <!-- Genre of the book -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="genre" class="form-label"><b>Genre</b></label>
@@ -355,6 +375,7 @@ $phone = $row["user_phone"];
                             <input type="text" class="form-control" id="genre" name="genre" value="<?php echo htmlspecialchars($genre); ?>" readonly>
                         </div>
                     </div>
+                    <!-- Total pages for the book -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="pagenum" class="form-label"><b>Number of Pages</b></label>

@@ -170,7 +170,7 @@ $total_pages = ceil($total_records / $records_per_page);
                 <div class="col-md-4">
                     <!-- Search bar -->
                     <form class="input-group mb-3" action="reservationSearchReturnArc.php" method="post">
-                        <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon2" name="search">
+                        <input type="text" class="form-control" placeholder="Search History ID" aria-label="Search" aria-describedby="basic-addon2" name="search">
                         <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
                             <i class='bx bx-search-alt-2'></i></button>
                     </form>
